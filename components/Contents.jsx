@@ -5,6 +5,7 @@ import Home from './Home.jsx';
 import LoginForm from './LoginForm.jsx';
 import RegistrationForm from './RegistrationForm.jsx';
 import Checkout from './Checkoutpage.jsx';
+import Products from "./Products.jsx";
 
 class Contents extends React.Component {
   render() {
@@ -16,6 +17,7 @@ class Contents extends React.Component {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/registration" element={<RegistrationForm />} />
+        <Route path="/products" element={<Products />} />
         <Route path="/checkout" element={<Checkout />} />
       </Routes>
       </div>

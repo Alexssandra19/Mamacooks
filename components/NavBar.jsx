@@ -12,6 +12,9 @@ const Navbar = () => {
           <a href="/login">LOGIN</a>
         </li>
         <li>
+          <a href="/products">PRODUCTS</a>
+        </li>
+        <li>
           <a href="/checkout">CHECKOUT</a>
         </li>
       </ul>

@@ -4,9 +4,9 @@ class RegistrationForm extends React.Component {
   constructor() {
     super();
     this.state = {
-      fname: '',
-      lname: '',
-      pnum: '',
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
       email: '',
       password: ''
     };
@@ -17,30 +17,59 @@ class RegistrationForm extends React.Component {
     this.setState({ [name]: value });
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    // Add your form submission logic here
-    console.log('Form submitted:', this.state);
+    
+    // Prepare form data
+    const formData = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      phoneNumber: this.state.phoneNumber,
+      email: this.state.email,
+      password: this.state.password
+    };
+  
+    try {
+      // Make HTTP request to your backend API
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+  
+      // Check if request was successful
+      if (response.ok) {
+        // Handle success
+       alert('User registered successfully');
+      } else {
+        // Handle failure
+        console.error('Failed to register user');
+      }
+    } catch (error) {
+      console.error('Error registering user:', error);
+    }
   }
-
+  
   render() {
     return (
       <div>
         <h2>Registration</h2>
-        <form onSubmit={this.handleSubmit} name="registrationForm" className="checkout-box">
+        <form onSubmit={this.handleSubmit} name="registrationForm" className="checkout-box" method="POST" action="/register">
           <div className="form-group">
             <label htmlFor="fname">First name</label>
-            <input type="text" id="fname" name="fname" value={this.state.fname} onChange={this.handleInputChange} required />
+            <input type="text" id="firstName" name="firstName" value={this.state.firstName} onChange={this.handleInputChange} required />
           </div>
 
           <div className="form-group">
             <label htmlFor="lname">Last name</label>
-            <input type="text" id="lname" name="lname" value={this.state.lname} onChange={this.handleInputChange} required />
+            <input type="text" id="lastName" name="lastName" value={this.state.lastName} onChange={this.handleInputChange} required />
           </div>
 
           <div className="form-group">
             <label htmlFor="pnum">Ph Number</label>
-            <input type="text" id="pnum" name="pnum" value={this.state.pnum} onChange={this.handleInputChange} required />
+            <input type="text" id="phoneNumber" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleInputChange} required />
           </div>
 
           <div className="form-group">
