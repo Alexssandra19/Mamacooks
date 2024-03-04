@@ -1,5 +1,6 @@
 // Import necessary dependencies
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';

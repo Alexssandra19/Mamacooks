@@ -1,5 +1,6 @@
 import React from 'react';
 import Page from "./NavBar.jsx";
+import Footer from './Footer.jsx';
 
 class ProductDetails extends React.Component {
   render() {
@@ -24,7 +25,7 @@ class ProductDetails extends React.Component {
     </div>
         </main>
         <footer>
-          <p>MAMA Cook &reg; 2024</p>
+          <Footer />
         </footer>
       </div>
     );

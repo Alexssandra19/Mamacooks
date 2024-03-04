@@ -1,16 +1,31 @@
 import React from "react";
 
 const Navbar = () => {
+  const dataFromSession = sessionStorage.getItem('Name');
+  const isLoggedIn = dataFromSession ? true : false;
+  const isAdmin = dataFromSession && dataFromSession.toUpperCase() == 'ADMIN ADMIN' ? true : false;
+  const handleClick =  () => {
+    sessionStorage.clear();
+    window.location.reload();
+  };
+  const content = isLoggedIn ? <li>
+                  <a href="" onClick={handleClick}>LOGOUT</a>
+                  </li> : <li>
+                  <a href="/login">LOGIN/SIGNUP</a>
+                  </li> ;
+
   return (
-    
     <nav>
       <ul>
         <li>
-          <a href="/registration">REGISTER</a>
+             {dataFromSession ? dataFromSession.toUpperCase() : ''}
         </li>
-        <li>
-          <a href="/login">LOGIN</a>
-        </li>
+        { isAdmin ? (
+          <li>
+          <a href="/admin">ADMIN</a>
+          </li>
+        ): ''}
+        { content }
         <li>
           <a href="/products">PRODUCTS</a>
         </li>
@@ -25,9 +40,12 @@ const Navbar = () => {
 
 const Page = () => {
   return (
-    <div>
-      <Navbar />
-    </div>
+    <header>
+      <div id="head-section">
+            <img src="./images/logo.png" alt="header-logo-image" width="10%" />
+            <Navbar />
+        </div>
+    </header>
   );
 };
 

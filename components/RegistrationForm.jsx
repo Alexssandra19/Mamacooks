@@ -1,4 +1,6 @@
 import React from 'react';
+import Page from "./NavBar.jsx";
+import Footer from './Footer.jsx';
 
 class RegistrationForm extends React.Component {
   constructor() {
@@ -42,21 +44,25 @@ class RegistrationForm extends React.Component {
       // Check if request was successful
       if (response.ok) {
         // Handle success
-       alert('User registered successfully');
+       alert('Menu added successfully');
       } else {
         // Handle failure
-        console.error('Failed to register user');
+        alert('Failed to add item');
+        console.error('Failed to add item');
       }
     } catch (error) {
-      console.error('Error registering user:', error);
+      alert('Failed to add item');
+      console.error('Error adding item:', error);
     }
   }
   
   render() {
     return (
       <div>
+        <Page />
+      <div>
         <h2>Registration</h2>
-        <form onSubmit={this.handleSubmit} name="registrationForm" className="checkout-box" method="POST" action="/register">
+        <form onSubmit={this.handleSubmit} name="registrationForm" className="form-box" method="POST" action="/register">
           <div className="form-group">
             <label htmlFor="fname">First name</label>
             <input type="text" id="firstName" name="firstName" value={this.state.firstName} onChange={this.handleInputChange} required />
@@ -86,6 +92,10 @@ class RegistrationForm extends React.Component {
             <button type="submit">Register</button>
           </div>
         </form>
+      </div>
+      <footer>
+          <Footer />
+      </footer>
       </div>
     );
   }

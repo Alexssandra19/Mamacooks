@@ -94,7 +94,7 @@ class Checkout extends Component {
           </div>
           <h1>Checkout</h1>
         </header>
-        <div className="checkout-box">
+        <div className="form-box">
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="name">Name:</label>
             <input type="text" id="name" name="name" value={formData.name} onChange={this.handleInputChange} required />
