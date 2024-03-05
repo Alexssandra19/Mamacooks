@@ -20,6 +20,9 @@ const Navbar = () => {
         <li>
              {dataFromSession ? dataFromSession.toUpperCase() : ''}
         </li>
+        <li>
+          <a href="/home">HOME</a>
+        </li>
         { isAdmin ? (
           <li>
           <a href="/admin">ADMIN</a>
@@ -42,7 +45,7 @@ const Page = () => {
   return (
     <header>
       <div id="head-section">
-            <img src="./images/logo.png" alt="header-logo-image" width="10%" />
+      <img src="./images/logo.png" href="/" alt="header-logo-image" width="10%" />
             <Navbar />
         </div>
     </header>

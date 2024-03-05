@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Page from "./NavBar.jsx";
+import { Redirect } from 'react-router-dom';
 
 class Checkout extends Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class Checkout extends Component {
     if (Object.keys(errors).length === 0) {
       // Add logic for processing the order
       console.log('Form submitted:', this.state.formData);
+      return <Redirect to='/checkout-success'  />
     } else {
       this.setState({ errors });
     }
@@ -87,13 +89,8 @@ class Checkout extends Component {
 
     return (
       <div>
-        <header>
-          <div id="head-section">
-            <img src="./images/logo.png" alt="header-logo-image" width="10%" />
-            <Page />
-          </div>
-          <h1>Checkout</h1>
-        </header>
+        <Page />
+        <h2>Checkout</h2>
         <div className="form-box">
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="name">Name:</label>
@@ -130,7 +127,7 @@ class Checkout extends Component {
               </div>
             )}
 
-            <button type="submit">Place Order</button>
+            <button className='btn btn-success' type="submit">Place Order</button>
           </form>
         </div>
       </div>
