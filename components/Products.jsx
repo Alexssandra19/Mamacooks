@@ -57,6 +57,10 @@ class Products extends React.Component {
     this.setState({ activeTab: tab });
     this.setData(tab);
   };
+
+  addToCheckout = (event) => {
+    console.log(event);
+  }
   
   render() {
     const { apiData, activeTab, activeData } = this.state;
@@ -87,14 +91,27 @@ class Products extends React.Component {
               </div>
           <section>
             <div>
-              <div className="row">
+              <div className="row m-0">
               {activeData ? activeData.map(item => (
-                <div className="card bg-light m-3 p-3"  style={{ width: '18rem'}}>
+                <div className="card bg-light m-2 p-3"  style={{ width: '19rem'}}>
                   <img src={'./images' + item.imageUrl} alt={item.name} className="card-img-top" style={{ height: '200px'}} />
                   <div class="card-body">
                     <h5 class="card-title">{item.name}</h5>
-                    <p class="card-text">{item.description}</p>
+                    <p class="card-text h-25">{item.description}</p>
                     <strong class="card-text">Price: ${item.price}</strong>
+                    <div className="mb-2 d-flex ">
+                      <label htmlFor="quantity" className="form-label">Quantity:</label>
+                      <input
+                        type="number"
+                        id="quantity"
+                        className="form-control ms-3"
+                        min="1"
+                        defaultValue='1'
+                      />
+                    </div>
+                    <button className="btn btn-primary w-100" onClick={() => this.addToCheckout()}>
+                      Add to Cart
+                    </button>
                   </div>
                 </div>
               )) :
