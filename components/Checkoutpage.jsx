@@ -89,7 +89,7 @@ class Checkout extends Component {
     const { formData, errors } = this.state;
     return (
       <div>
-        {this.state.isPlaced && <Navigate to="/" replace="true"/>}
+        {this.state.isPlaced && <Navigate to="/checkout-success" replace="true"/>}
         <Page />
         <h2>Checkout</h2>
         <div className="form-box">
