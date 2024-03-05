@@ -87,7 +87,6 @@ class Checkout extends Component {
 
   render() {
     const { formData, errors } = this.state;
-
     return (
       <div>
         {this.state.isPlaced && <Navigate to="/" replace="true"/>}
@@ -104,11 +103,11 @@ class Checkout extends Component {
             {errors.email && <span className="error">{errors.email}</span>}
 
             <label htmlFor="address">Shipping Address:</label>
-            <textarea id="address" name="address" value={formData.address} onChange={this.handleInputChange} rows="4" required />
+            <textarea class="form-control" rows="3" id="address" name="address" value={formData.address} onChange={this.handleInputChange} rows="4" required />
             {errors.address && <span className="error">{errors.address}</span>}
 
             <label htmlFor="payment">Payment Method:</label>
-            <select id="payment" name="payment" value={formData.payment} onChange={this.handlePaymentChange} required>
+            <select class="form-control" id="payment" name="payment" value={formData.payment} onChange={this.handlePaymentChange} required>
               <option value="credit-card">Credit Card</option>
               <option value="paypal">PayPal</option>
             </select>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Page from './NavBar.jsx';
 import User from '../models/user.js';
+import { Navigate } from 'react-router-dom';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -8,6 +9,7 @@ class LoginForm extends Component {
     this.state = {
       email: '',
       password: '',
+      isPlaced: false
     };
   }
 
@@ -51,8 +53,8 @@ class LoginForm extends Component {
           lastName: userData.data.lastName,
           email: userData.data.email});
           sessionStorage.setItem('Name', userDetails.firstName + ' ' + userDetails.lastName);
-          //reroute to home page
           alert('Login successful');
+          this.setState({isPlaced: true});
       } else {
         // Handle failure
         alert('Failed to login');
@@ -70,6 +72,7 @@ class LoginForm extends Component {
   render() {
     return (
       <div>
+        {this.state.isPlaced && <Navigate to="/" replace="true"/>}
         <Page />
       <div className="container">
         <h2>Login</h2>
