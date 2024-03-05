@@ -80,6 +80,23 @@ app.post('/api/register/menuItem', async (req, res) => {
   }
 });
 
+app.delete('/api/products/:productId', async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const deletedItem = await MenuItem.findByIdAndDelete(productId);
+    if (!deletedItem) {
+      return res.status(404).json({ message: 'Menu Item not found' });
+    }
+
+    res.status(200).json({ message: 'Menu Item deleted successfully', data: deletedItem });
+
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 // Route to serve your React application
 app.get("*", (req, res) => {
   res.sendFile(path.resolve("public/index.html"));

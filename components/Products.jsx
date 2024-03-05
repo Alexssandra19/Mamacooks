@@ -1,5 +1,4 @@
 import React , { useEffect, useState } from 'react';
-import Link from 'react-router-dom';
 import Page from "./NavBar.jsx";
 import MenuItem from '../models/product.js';
 import Footer from './Footer.jsx';
@@ -63,13 +62,8 @@ class Products extends React.Component {
     const { apiData, activeTab, activeData } = this.state;
     return (
       <div>
-         <header>
-        <div id="head-section">
-            <img src="./images/logo.png" alt="header-logo-image" width="10%" />
-            <Page />
-          </div>
-          <h1>Products</h1>
-        </header>
+          <Page />
+          <h2>Products</h2>
         <main className='container'>
         <div className="tab-container">
                 <button
@@ -96,13 +90,11 @@ class Products extends React.Component {
               <div className="row">
               {activeData ? activeData.map(item => (
                 <div className="card bg-light m-3 p-3"  style={{ width: '18rem'}}>
-                  {/* <Link to={`/products/${item._id}`}> */}
                   <img src={'./images' + item.imageUrl} alt={item.name} className="card-img-top" style={{ height: '200px'}} />
-                  {/* </Link> */}
                   <div class="card-body">
                     <h5 class="card-title">{item.name}</h5>
                     <p class="card-text">{item.description}</p>
-                    <strong class="card-text">Price: {item.price}</strong>
+                    <strong class="card-text">Price: ${item.price}</strong>
                   </div>
                 </div>
               )) :
