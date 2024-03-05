@@ -6,8 +6,10 @@ class CheckoutSuccess extends Component {
     return (
         <div>
             <Page />
+            <div className='container'>
             <h2>Order Placed Successfully!</h2>
-            <p>Thank you for your purchase. Your order has been successfully placed.</p>
+            <p className='text-center'>Thank you for your purchase. Your order has been successfully placed.</p>
+            </div>
         </div>
     );
   }

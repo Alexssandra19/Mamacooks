@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Page from "./NavBar.jsx";
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 class Checkout extends Component {
   constructor(props) {
@@ -16,7 +16,8 @@ class Checkout extends Component {
         expiryDate: '',
         cvv: '',
       },
-      errors: {}
+      errors: {},
+      isPlaced: false
     };
   }
 
@@ -46,7 +47,7 @@ class Checkout extends Component {
     if (Object.keys(errors).length === 0) {
       // Add logic for processing the order
       console.log('Form submitted:', this.state.formData);
-      return <Redirect to='/checkout-success'  />
+      this.setState({isPlaced: true});
     } else {
       this.setState({ errors });
     }
@@ -89,6 +90,7 @@ class Checkout extends Component {
 
     return (
       <div>
+        {this.state.isPlaced && <Navigate to="/" replace="true"/>}
         <Page />
         <h2>Checkout</h2>
         <div className="form-box">
