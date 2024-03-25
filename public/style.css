@@ -98,9 +98,9 @@ h1 {
     text-shadow: 2px 5px #857c7c;
 }
 #head-title {
-    margin: 80px auto;
+    margin: 50px auto;
     width: 65%;
-    height: 50vh;
+    height: 15vh;
 }
 
 #header-button
@@ -153,4 +153,86 @@ h1 {
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.feedback-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  flex: 1;
+  margin: 10px;
+}
+
+.feedback-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertical centering */
+  align-items: center; /* Horizontal centering */
+  text-align: center; /* Align text in the center */
+  height: 100%; /* Ensure the content takes full height */
+}
+
+.feedback-text {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.feedback-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.star {
+  font-size: 20px;
+  color: #ffc107; /* Color of unfilled star */
+}
+
+.filled {
+  color: #ff9800; /* Color of filled star */
+}
+
+.rating {
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  padding: 20px;
+}
+
+.blog-section {
+  flex: 2;
+  margin-right: 20px;
+}
+
+.blog-posts {
+  height: 400px;
+  display: flex;
+}
+
+.feedback-section {
+  flex: 1;
+}
+
+.feedback-container {
+  max-width: 500px;
+  margin: 10px;
+  height: 380px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-success {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

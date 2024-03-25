@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const User = require('./models/user');
 const MenuItem = require('./models/product');
+const Feedback = require('./models/feedback');
 
 app.use(express.static("public"));
 
@@ -50,6 +51,22 @@ app.get('/api/menuItems', async (req, res) => {
   }
 });
 
+app.get('/api/blogposts', async (req, res) => {
+
+  try {
+    const feedbacks = await Feedback.find();
+    
+    if (feedbacks) {
+      res.json({ success: true, data: feedbacks });
+    } else {
+      res.json({ success: false, message: 'Error fetching products' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 // Route to handle registration
 app.post('/api/register', async (req, res) => {
   try {
@@ -59,6 +76,22 @@ app.post('/api/register', async (req, res) => {
     await newUser.save();
     
     res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Route to handle registration
+app.post('/api/add/feedback', async (req, res) => {
+  try {
+   
+    const feedback = new Feedback(req.body);
+  
+    await feedback.save();
+    
+    res.status(201).json({ message: 'Feedback added successfully' });
   } catch (error) {
    
     console.error(error);
