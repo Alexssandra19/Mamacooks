@@ -80,15 +80,40 @@ app.post('/api/register/menuItem', async (req, res) => {
   }
 });
 
-app.delete('/api/products/:productId', async (req, res) => {
+app.delete('/api/products/:id', async (req, res) => {
   try {
-    const productId = req.params.productId;
+    const productId = req.params.id;
     const deletedItem = await MenuItem.findByIdAndDelete(productId);
     if (!deletedItem) {
       return res.status(404).json({ message: 'Menu Item not found' });
     }
 
     res.status(200).json({ message: 'Menu Item deleted successfully', data: deletedItem });
+
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.put('/api/products/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, description, price, restaurantID, category, imageUrl } = req.body;
+  try {
+    const updatedItem = await MenuItem.findByIdAndUpdate(id, {
+      name,
+      description,
+      price,
+      restaurantID,
+      category,
+      imageUrl
+    }, { new: true });
+    if (!updatedItem) {
+      return res.status(404).json({ message: 'Menu Item not found' });
+    }
+
+    res.status(200).json({ message: 'Menu Item updated successfully', data: updatedItem });
 
   } catch (error) {
    
