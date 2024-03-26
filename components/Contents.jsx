@@ -9,6 +9,7 @@ import AddMenuItem from './Admin/AddMenuItem.jsx';
 import ProductDetails from './ProductDetails.jsx';
 import CheckoutSuccess from './CheckoutSuccess.jsx';
 import Feedback from './Feedback.jsx';
+import CartPage from './Cart.jsx';
 
 class Contents extends React.Component {
   render() {
@@ -23,9 +24,10 @@ class Contents extends React.Component {
         <Route path="/products" element={<Products />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/admin" element={<AddMenuItem />} />
-        <Route path="/products/:_id" element={<ProductDetails />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/checkout-success" element={<CheckoutSuccess />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
       </div>
     );

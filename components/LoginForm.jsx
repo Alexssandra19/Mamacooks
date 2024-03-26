@@ -42,23 +42,26 @@ class LoginForm extends Component {
         },
         body: JSON.stringify(formData)
       });
+      const responseData = await response.json();
   
       // Check if request was successful
-      if (response.ok) {
+      if (responseData.success) {
         // Handle success
-        const userData = await response.json();
-        console.log(userData.data);
+        const userData = responseData.data;
         // Map API response to UserModel instances
-          const userDetails = new User({firstName: userData.data.firstName, 
-          lastName: userData.data.lastName,
-          email: userData.data.email});
+          const userDetails = new User({
+          _id: userData._id,
+          firstName: userData.firstName, 
+          lastName: userData.lastName,
+          email: userData.email});
           sessionStorage.setItem('Name', userDetails.firstName + ' ' + userDetails.lastName);
+          sessionStorage.setItem('UserId', userDetails._id);
           alert('Login successful');
           this.setState({isPlaced: true});
       } else {
         // Handle failure
-        alert('Failed to login');
-        console.error('Failed to login');
+        alert(responseData.message);
+        console.error('Incorrect username or password');
       }
     } catch (error) {
       alert('Failed to login');
@@ -101,11 +104,13 @@ class LoginForm extends Component {
             />
           </div>
 
-          <div className="form-group">
-            <button type="submit">Login</button>
+          <div className="form-group d-flex justify-content-center" >
+            <button className="btn btn-success btn-lg" type="submit">Login</button>
           </div>
         </form>
+        <div className="form-group d-flex justify-content-center" >
         <p className="link">Don't have an account? <a href="/registration">Register here</a></p>
+        </div>
       </div>
       </div>
     );
