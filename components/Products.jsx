@@ -2,6 +2,7 @@ import React , { useEffect, useState } from 'react';
 import Page from "./NavBar.jsx";
 import MenuItem from '../models/product.js';
 import Footer from './Footer.jsx';
+import {useNavigate} from 'react-router-dom';
 
 class Products extends React.Component {
   constructor(props) {
@@ -59,6 +60,8 @@ class Products extends React.Component {
   };
 
   addToCheckout = (event) => {
+    // const navigate = useNavigate();
+    // navigate('/home');
     console.log(event);
   }
   
@@ -69,26 +72,26 @@ class Products extends React.Component {
           <Page />
           <h2>Products</h2>
         <main className='container'>
-        <div className="tab-container">
-                <button
-                  className={`tab-button ms-2 mb-2 ${activeTab === '' ? 'active' : ''}`}
-                  onClick={() => this.handleTabChange('')}
-                >
-                  All
-                </button>
-                <button
-                  className={`tab-button ms-2 mb-2 ${activeTab === 'veg' ? 'active' : ''}`}
-                  onClick={() => this.handleTabChange('veg')}
-                >
-                  Vegetarian
-                </button>
-                <button
-                  className={`tab-button ms-2 mb-2 ${activeTab === 'nonVeg' ? 'active' : ''}`}
-                  onClick={() => this.handleTabChange('nonVeg')}
-                >
-                  Non-vegetarian
-                </button>
-              </div>
+          <div className="tab-container">
+            <button
+              className={`tab-button ms-2 mb-2 ${activeTab === '' ? 'active' : ''}`}
+              onClick={() => this.handleTabChange('')}
+            >
+              All
+            </button>
+            <button
+              className={`tab-button ms-2 mb-2 ${activeTab === 'veg' ? 'active' : ''}`}
+              onClick={() => this.handleTabChange('veg')}
+            >
+              Vegetarian
+            </button>
+            <button
+              className={`tab-button ms-2 mb-2 ${activeTab === 'nonVeg' ? 'active' : ''}`}
+              onClick={() => this.handleTabChange('nonVeg')}
+            >
+              Non-vegetarian
+            </button>
+          </div>
           <section>
             <div>
               <div className="row m-0">
@@ -106,10 +109,11 @@ class Products extends React.Component {
                         id="quantity"
                         className="form-control ms-3"
                         min="1"
+                        max="5"
                         defaultValue='1'
                       />
                     </div>
-                    <button className="btn btn-primary w-100" onClick={() => this.addToCheckout()}>
+                    <button className="btn btn-primary w-100" onClick={(event) => this.addToCheckout(event)}>
                       Add to Cart
                     </button>
                   </div>
@@ -119,56 +123,7 @@ class Products extends React.Component {
                     <h3><strong>No items to display</strong></h3>
                   </div>}
               </div>
-              {/* <div className="card bg-light">
-                <img src="./images/veg_Pics/Mushroom-Curry.avif" alt="Vegetarian Item Name" className="product-image" />
-                <h3>Creamy Mashroom</h3>
-              </div>
-              <div className="card">
-                    <img src="./images/veg_Pics/Full Platter.jpg" alt="Vegetarian Item Name" class="product-image"/>
-                    <h3>Full Platter</h3>
-                </div>
-
-                <div className="product-card">
-                    <img src="./images/veg_Pics/Masala_Bhindi.jpg" alt="Vegetarian Item Name" class="product-image"/>
-                    <h3>Masala Bhindi</h3>
-                </div>
-
-                <div className="product-card">
-                    <img src="./images/veg_Pics/Tava Pulav.jpg" alt="Vegetarian Item Name" class="product-image"/>
-                    <h3>Tawa Pulav</h3>
-                </div>
-
-                <div className="product-card">
-                    <img src="./images/veg_Pics/Paneer.jpg" alt="Vegetarian Item Name" class="product-image"/>
-                    <h3>Paneer Butter Masala</h3>
-                </div> */}
             </div>
-            {/* <div>
-              <h2>Non-vegetarian Items</h2>
-              <div className="product-card">
-                <img src="./images/Non_Veg_pics/Fish curry.jpg" alt="Non-Vegetarian Item Name" className="product-image" />
-                <h3>Fish Curry</h3>
-              </div>
-              <div className="product-card">
-                    <img src="./images/Non_Veg_pics/Tandoori Chicken.jpg" alt="Non-Vegetarian Item Name" class="product-image"/>
-                    <h3>Tandoori Chicken</h3>
-                </div>
-
-                <div className="product-card">
-                    <img src="./images/Non_Veg_pics/FullPlatter.jpg" alt="Non-Vegetarian Item Name" class="product-image"/>
-                    <h3>FullPlatter</h3>
-                </div>
-
-                <div className="product-card">
-                    <img src="./images/Non_Veg_pics/Chicken_Biryani.jpg" alt="Non-Vegetarian Item Name" class="product-image"/>
-                    <h3>Chicken Biryani</h3>
-                </div>
-
-                <div className="product-card">
-                    <img src="./images/Non_Veg_pics/Masala Prawns.jpg" alt="Non-Vegetarian Item Name" class="product-image"/>
-                    <h3>Masala Prawns</h3>
-                </div>
-            </div> */}
           </section>
         </main>
         <footer>

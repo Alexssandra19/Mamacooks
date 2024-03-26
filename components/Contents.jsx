@@ -8,6 +8,7 @@ import Products from "./Products.jsx";
 import AddMenuItem from './Admin/AddMenuItem.jsx';
 import ProductDetails from './ProductDetails.jsx';
 import CheckoutSuccess from './CheckoutSuccess.jsx';
+import Feedback from './Feedback.jsx';
 
 class Contents extends React.Component {
   render() {
@@ -24,6 +25,7 @@ class Contents extends React.Component {
         <Route path="/admin" element={<AddMenuItem />} />
         <Route path="/products/:_id" element={<ProductDetails />} />
         <Route path="/checkout-success" element={<CheckoutSuccess />} />
+        <Route path="/feedback" element={<Feedback />} />
       </Routes>
       </div>
     );
