@@ -253,7 +253,7 @@ class AddMenuItem extends React.Component {
                             <table className="table">
                                 <thead>
                                     <tr>
-                                        <th scope="col">ID</th>
+                                        <th scope="col"></th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Price</th>
@@ -267,7 +267,7 @@ class AddMenuItem extends React.Component {
                                     {this.state.products.map(product =>
                                     (
                                         <tr key={product._id}>
-                                            <td>{product._id}</td>
+                                            <td>{product.id}</td>
                                             <td>
                                                 {editMode && editedProduct._id === product._id ? (
                                                     <input
@@ -340,7 +340,7 @@ class AddMenuItem extends React.Component {
                                                 ) : (
                                                     <button className='btn btn-primary' onClick={() => this.handleEdit(product)}>Edit</button>
                                                 )}
-                                                <button className='btn btn-danger' onClick={() => this.handleDelete(product._id)}>Delete</button>
+                                                <button className='btn btn-danger ms-2' onClick={() => this.handleDelete(product._id)}>Delete</button>
                                             </td>
                                         </tr>
                                     ))}
