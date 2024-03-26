@@ -1,34 +1,65 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Page from "./NavBar.jsx";
 import Footer from './Footer.jsx';
+import MenuItem from '../models/product.js';
 
-class ProductDetails extends React.Component {
+class ProductDetails extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      product: null,
+    };
+  }
+
+  componentDidMount() {
+    const productId = '65e79847858deee2a047b7e2';
+    this.fetchProductDetails(productId);
+  }
+
+  fetchProductDetails = async (productId) => {
+    try {
+      const response = await fetch(`/api/product/${productId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+     
+      const menuData = await response.json();
+      const productDetails = new MenuItem(menuData.data);
+      this.setState({ product: productDetails });
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    }
+  };
+
   render() {
-    return (
-      <div>
-         <header>
-        <div id="head-section">
-            <img src="./images/logo.png" alt="header-logo-image" width="10%" />
-            <Page />
+    const { product } = this.state;
+
+    if(product) {
+      return (
+        <div>
+          <Page />
+          <div className="product-details-container">
+            <img src={'./images' + product.imageUrl} alt="Product Image" className="product-image" />
+            <div className="product-details-content">
+              <h1 className="product-name">{product.name}</h1>
+              <p className="product-description">{product.description}</p>
+              <button className="button" onClick={() => this.addToCart(product)}>Add to Cart</button>
+            </div>
           </div>
-          <h1>Products</h1>
-        </header>
-        <main>
-        <div class="product-container">
-        <img src="./images/veg_Pics/Masala_Bhindi.jpg" alt="Product Image" class="product-image" />
-        <div class="product-details">
-            <h1>Masala Bhindi</h1>
-            <p> there’s one classic bhindi (okra) dish with North Indian flavors, it is the Bhindi Masala. This is a semi-dry preparation featuring the star ingredient okra pods (bhindi in Hindi), piquant onions, tangy tomatoes, bold Indian spices and herbs. It is one of the most popular dishes served in almost all restaurants too, of North India.
-            </p>
-            <a href="#" class="button">Add to Cart</a>
-        </div>
-    </div>
-        </main>
-        <footer>
           <Footer />
-        </footer>
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return (
+        <div></div>
+      )
+    }
   }
 }
 

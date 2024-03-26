@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const User = require('./models/user');
 const MenuItem = require('./models/product');
 const Feedback = require('./models/feedback');
+const Cart = require("./models/cart");
+const { ObjectId } = require('mongodb');
 
 app.use(express.static("public"));
 
@@ -35,11 +37,23 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-app.get('/api/menuItems', async (req, res) => {
-
+app.get('/api/user/:id', async (req, res) => {
   try {
-    const menuItems = await MenuItem.find();
-    
+    const user = await User.findById(req.params.id); 
+    if (user) {
+      res.json({ success: true, data: user });
+    } else {
+      res.json({ success: false, message: 'Error fetching user' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.get('/api/menuItems', async (req, res) => {
+  try {
+    const menuItems = await MenuItem.find(); 
     if (menuItems) {
       res.json({ success: true, data: menuItems });
     } else {
@@ -52,7 +66,6 @@ app.get('/api/menuItems', async (req, res) => {
 });
 
 app.get('/api/blogposts', async (req, res) => {
-
   try {
     const feedbacks = await Feedback.find();
     
@@ -76,6 +89,57 @@ app.post('/api/register', async (req, res) => {
     await newUser.save();
     
     res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Route to add cart
+app.post('/api/checkout', async (req, res) => {
+  try {
+    const cartData = new Cart(req.body);
+    await cartData.save();
+    
+    res.status(201).json({ message: 'Checkout added successfully' });
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Route to add cart
+app.get('/api/checkout/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const cart = await Cart.findOne({userId: new ObjectId(id)}); 
+    if (cart) {
+      res.json({ success: true, data: cart });
+    } else {
+      res.json({ success: false, message: 'No data Found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.put('/api/checkout/:id', async (req, res) => {
+  const { id } = req.params;
+  const { userId, items } = req.body;
+  try {
+    const updatedItem = await Cart.findOneAndUpdate({userId: new ObjectId(id)}, {
+      userId,
+      items
+    }, { new: true });
+    if (!updatedItem) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+    res.status(200).json({ message: 'Cart updated successfully', data: updatedItem });
+
   } catch (error) {
    
     console.error(error);
@@ -130,11 +194,27 @@ app.delete('/api/products/:id', async (req, res) => {
   }
 });
 
+app.get('/api/product/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await MenuItem.findOne(productId);
+    if (product) {
+      res.json({ success: true, data: product });
+    } else {
+      return res.status(404).json({ message: 'Menu Item not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 app.put('/api/products/:id', async (req, res) => {
-  const { id } = req.params;
+  const { _id } = req.params;
   const { name, description, price, restaurantID, category, imageUrl } = req.body;
   try {
-    const updatedItem = await MenuItem.findByIdAndUpdate(id, {
+    const updatedItem = await MenuItem.findByIdAndUpdate(_id, {
+      _id,
       name,
       description,
       price,
@@ -152,6 +232,18 @@ app.put('/api/products/:id', async (req, res) => {
    
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.post('/api/carts', async (req, res) => {
+  try {
+    const { userId, items } = req.body;
+    const cart = new Cart({ userId, items });
+    await cart.save();
+    res.status(201).json(cart);
+  } catch (error) {
+    console.error('Error creating cart:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

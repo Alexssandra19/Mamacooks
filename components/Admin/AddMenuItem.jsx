@@ -22,31 +22,31 @@ class AddMenuItem extends React.Component {
 
     componentDidMount() {
         this.fetchData();
-      }
-    
+    }
+
     fetchData = async () => {
         try {
-          const response = await fetch('/api/menuItems', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json'
+            const response = await fetch('/api/menuItems', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
             }
-          });
-    
-          if (!response.ok) {
-            throw new Error('Failed to fetch data');
-          }
-    
-          const menuData = await response.json();
-          const mappedMenuItems = menuData.data.map((menu) => {
-            return new MenuItem(menu);
-          });
-          this.setState({products: mappedMenuItems});
+
+            const menuData = await response.json();
+            const mappedMenuItems = menuData.data.map((menu) => {
+                return new MenuItem(menu);
+            });
+            this.setState({ products: mappedMenuItems });
         } catch (error) {
-          alert('Failed to get Menu Items');
-          console.error('Failed to get Menu Items:', error);
+            alert('Failed to get Menu Items');
+            console.error('Failed to get Menu Items:', error);
         }
-      };
+    };
 
 
     handleEdit = (product) => {
@@ -99,7 +99,7 @@ class AddMenuItem extends React.Component {
         })
             .then(response => {
                 if (response.ok) {
-                    this.setState({ products: this.state.products.filter(product => product._id !== productId) });
+                    this.setState({ products: this.state.products.filter(product => product._id != productId) });
                 } else {
                     console.error('Failed to delete product');
                 }
@@ -111,36 +111,36 @@ class AddMenuItem extends React.Component {
         e.preventDefault();
         // Add logic to send data to the server or perform any other actions
         console.log('New menu item:');
-    
-    // Prepare form data
-    const formData = {
-        name: this.state.name,
-        description: this.state.description,
-        price: this.state.price,
-        restaurantID: this.state.restaurantID,
-        category: this.state.category,
-        imageUrl: this.state.imageUrl,
-    };
-  
-    try {
-      // Make HTTP request to your backend API
-      const response = await fetch('/api/register/menuItem', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-  
-      // Check if request was successful
-      if (response.ok) {
-        // Handle success
-       alert('Item added successfully');
-      } else {
-        // Handle failure
-        console.error('Failed to add item');
-      }
-    } catch (error) {
+
+        // Prepare form data
+        const formData = {
+            name: this.state.name,
+            description: this.state.description,
+            price: this.state.price,
+            restaurantID: this.state.restaurantID,
+            category: this.state.category,
+            imageUrl: this.state.imageUrl,
+        };
+
+        try {
+            // Make HTTP request to your backend API
+            const response = await fetch('/api/register/menuItem', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            // Check if request was successful
+            if (response.ok) {
+                // Handle success
+                alert('Item added successfully');
+            } else {
+                // Handle failure
+                console.error('Failed to add item');
+            }
+        } catch (error) {
             console.error('Error adding item:', error);
         }
         // Reset the form
@@ -155,6 +155,7 @@ class AddMenuItem extends React.Component {
     };
     render() {
         const { activeTab, editMode, editedProduct } = this.state;
+        console.log();
         return (
             <div>
                 <Page />
@@ -242,109 +243,108 @@ class AddMenuItem extends React.Component {
                             </form>
                         </div>
                     ) : <div></div>}
-
-                </div>
-                {activeTab && activeTab === 'edit' ? (
-
-                    <div className='container'>
-                        <h2>Existing Products</h2>
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Restaurant ID</th>
-                                    <th scope="col">Category</th>
-                                    <th scope="col">Image Url</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.products.map(product => (
-                                    <tr key={product._id}>
-                                        <td>{product.id}</td>
-                                        <td>
-                                            {editMode && editedProduct._id === product._id ? (
-                                                <input
-                                                    type="text"
-                                                    value={editedProduct.name}
-                                                    onChange={(e) => this.handleChange(e, 'name')}
-                                                />
-                                            ) : (
-                                                product.name
-                                            )}
-                                        </td>
-                                        <td>
-                                            {editMode && editedProduct._id === product._id ? (
-                                                <input
-                                                    type="text"
-                                                    value={editedProduct.description}
-                                                    onChange={(e) => this.handleChange(e, 'description')}
-                                                />
-                                            ) : (
-                                                product.description
-                                            )}
-                                        </td>
-                                        <td>
-                                            {editMode && editedProduct._id === product._id ? (
-                                                <input
-                                                    type="number"
-                                                    value={editedProduct.price}
-                                                    onChange={(e) => this.handleChange(e, 'price')}
-                                                />
-                                            ) : (
-                                                product.price
-                                            )}
-                                        </td>
-                                        <td>
-                                            {editMode && editedProduct._id === product._id ? (
-                                                <input
-                                                    type="text"
-                                                    value={product.restaurantID}
-                                                    onChange={(e) => this.handleChange(e, 'restaurantID')}
-                                                />
-                                            ) : (
-                                                product.restaurantID
-                                            )}
-                                        </td>
-                                        <td>
-                                            {editMode && editedProduct._id === product._id ? (
-                                                <input
-                                                    type="text"
-                                                    value={product.category}
-                                                    onChange={(e) => this.handleChange(e, 'category')}
-                                                />
-                                            ) : (
-                                                product.category
-                                            )}
-                                        </td>
-                                        <td>
-                                            {editMode && editedProduct._id === product._id ? (
-                                                <input
-                                                    type="text"
-                                                    value={product.imageUrl}
-                                                    onChange={(e) => this.handleChange(e, 'imageUrl')}
-                                                />
-                                            ) : (
-                                                product.imageUrl
-                                            )}
-                                        </td>
-                                        <td>
-                                            {editMode && editedProduct._id === product._id ? (
-                                                <button className='btn btn-success' onClick={() => this.handleUpdate(product._id)}>Save</button>
-                                            ) : (
-                                                <button className='btn btn-primary' onClick={() => this.handleEdit(product)}>Edit</button>
-                                            )}
-                                            <button className='btn btn-danger' onClick={() => this.handleDelete(product._id)}>Delete</button>
-                                        </td>
+                    {activeTab && activeTab === 'edit' ? (
+                        <div className='container'>
+                            <h2>Existing Products</h2>
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Restaurant ID</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Image Url</th>
+                                        <th scope="col">Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                ) : <div></div>}
+                                </thead>
+                                <tbody>
+                                    {this.state.products.map(product =>
+                                    (
+                                        <tr key={product.id}>
+                                            <td>{product._id}</td>
+                                            <td>
+                                                {editMode && editedProduct._id === product._id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={editedProduct.name}
+                                                        onChange={(e) => this.handleChange(e, 'name')}
+                                                    />
+                                                ) : (
+                                                    product.name
+                                                )}
+                                            </td>
+                                            <td>
+                                                {editMode && editedProduct._id === product._id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={editedProduct.description}
+                                                        onChange={(e) => this.handleChange(e, 'description')}
+                                                    />
+                                                ) : (
+                                                    product.description
+                                                )}
+                                            </td>
+                                            <td>
+                                                {editMode && editedProduct._id === product._id ? (
+                                                    <input
+                                                        type="number"
+                                                        value={editedProduct.price}
+                                                        onChange={(e) => this.handleChange(e, 'price')}
+                                                    />
+                                                ) : (
+                                                    product.price
+                                                )}
+                                            </td>
+                                            <td>
+                                                {editMode && editedProduct._id === product._id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={product.restaurantID}
+                                                        onChange={(e) => this.handleChange(e, 'restaurantID')}
+                                                    />
+                                                ) : (
+                                                    product.restaurantID
+                                                )}
+                                            </td>
+                                            <td>
+                                                {editMode && editedProduct._id === product._id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={product.category}
+                                                        onChange={(e) => this.handleChange(e, 'category')}
+                                                    />
+                                                ) : (
+                                                    product.category
+                                                )}
+                                            </td>
+                                            <td>
+                                                {editMode && editedProduct._id === product._id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={product.imageUrl}
+                                                        onChange={(e) => this.handleChange(e, 'imageUrl')}
+                                                    />
+                                                ) : (
+                                                    product.imageUrl
+                                                )}
+                                            </td>
+                                            <td>
+                                                {editMode && editedProduct._id === product._id ? (
+                                                    <button className='btn btn-success' onClick={() => this.handleUpdate(product._id)}>Save</button>
+                                                ) : (
+                                                    <button className='btn btn-primary' onClick={() => this.handleEdit(product)}>Edit</button>
+                                                )}
+                                                <button className='btn btn-danger' onClick={() => this.handleDelete(product._id)}>Delete</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : <div></div>}
+                </div>
                 <footer>
                     <Footer />
                 </footer>
