@@ -64,6 +64,11 @@ class AddMenuItem extends React.Component {
         });
     };
 
+    handleChange = (e) => {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+    };
+
     handleUpdate = async (productId) => {
         fetch(`/api/products/${productId}`, {
             method: 'PUT',
@@ -155,7 +160,6 @@ class AddMenuItem extends React.Component {
     };
     render() {
         const { activeTab, editMode, editedProduct } = this.state;
-        console.log();
         return (
             <div>
                 <Page />
@@ -262,7 +266,7 @@ class AddMenuItem extends React.Component {
                                 <tbody>
                                     {this.state.products.map(product =>
                                     (
-                                        <tr key={product.id}>
+                                        <tr key={product._id}>
                                             <td>{product._id}</td>
                                             <td>
                                                 {editMode && editedProduct._id === product._id ? (

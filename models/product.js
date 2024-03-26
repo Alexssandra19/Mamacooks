@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 
 // Define the menu item schema
 const menuItemSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
   restaurantID: {
     type: String,
     required: true,
