@@ -32,14 +32,12 @@ class CartPage extends Component {
     })
       .then(response => {
         if (response.ok) {
-          // Handle success
-          alert('Checkout added successfully');
+          this.setState({ isPlaced: true });
         } else {
           console.error('Failed to update product');
         }
       })
       .catch(error => console.error('Failed to update product:', error));
-    this.setState({ isPlaced: true });
   }
 
   getUserCheckout = async () => {
@@ -157,7 +155,7 @@ class CartPage extends Component {
     const subtotal = cartItems?.length > 0 ? cartItems.reduce((acc, item) => acc + item.price * item.quantity * 1.00, 0) : 0;
     const tax = subtotal * 0.13;
     const delivery = subtotal > 30.00 ? 0.00 : subtotal > 20.00 && subtotal < 30.00 ? 2.99 : 4.99;
-    const total = subtotal + tax + 5.00;
+    const total = subtotal + tax + 5.00 + delivery;
     return (
       <div>
         <Page />

@@ -140,7 +140,7 @@ class UserDetails extends Component {
               )}
             </div>
     
-            <button onClick={this.toggleEditMode}>{isEditMode ? 'Save' : 'Edit'}</button>
+            <button className='btn btn-lg btn-success w-100' onClick={this.toggleEditMode}>{isEditMode ? 'Save' : 'Edit'}</button>
             </form>
             <footer>
           <Footer />

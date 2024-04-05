@@ -8,6 +8,7 @@ const MenuItem = require('./models/product');
 const Feedback = require('./models/feedback');
 const Cart = require("./models/cart");
 const { ObjectId } = require('mongodb');
+const Order = require("./models/order");
 
 app.use(express.static("public"));
 
@@ -157,6 +158,37 @@ app.put('/api/checkout/:id', async (req, res) => {
 
     res.status(200).json({ message: 'Cart updated successfully', data: updatedItem });
 
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Route to delete user data by ID
+app.delete('/api/checkout/:id', async (req, res) => {
+  const { id } = req.params; // Extract the user ID from the request parameters
+  try {
+    // Attempt to find the user by ID and delete it
+    const deletedUserCart = await Cart.findOneAndDelete({userId:id});
+    if (deletedUserCart) {
+      res.json({ success: true, message: 'Cart deleted successfully' });
+    } else {
+      res.status(404).json({ success: false, message: 'Cart not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Route to place order
+app.post('/api/order', async (req, res) => {
+  try {
+    const orderData = new Order(req.body);
+    await orderData.save();
+    
+    res.status(201).json({ message: 'Order placed successfully' });
   } catch (error) {
    
     console.error(error);
