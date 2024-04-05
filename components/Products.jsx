@@ -85,7 +85,6 @@ class Products extends React.Component {
     const userId = sessionStorage.getItem('UserId');
     if (userId) {
       const userCheckout = await this.getUserCheckout(userId);
-      console.log(userCheckout);
       if (userCheckout) {
         let checkoutData = new Cart({
           userId: userId,

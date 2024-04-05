@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate,Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './Home.jsx';
 import LoginForm from './LoginForm.jsx';
 import RegistrationForm from './RegistrationForm.jsx';
@@ -10,6 +10,7 @@ import ProductDetails from './ProductDetails.jsx';
 import CheckoutSuccess from './CheckoutSuccess.jsx';
 import Feedback from './Feedback.jsx';
 import CartPage from './Cart.jsx';
+import UserDetails from './UserDetails.jsx';
 
 class Contents extends React.Component {
   render() {
@@ -28,6 +29,8 @@ class Contents extends React.Component {
         <Route path="/checkout-success" element={<CheckoutSuccess />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/cart" element={<CartPage />} />
+        {/* <Route path="/user-details/:userId" element={<UserDetails />} /> */}
+        <Route path="/user-details" element={<UserDetails />} />
       </Routes>
       </div>
     );
