@@ -227,10 +227,10 @@ app.get('/api/product/:id', async (req, res) => {
 });
 
 app.put('/api/products/:id', async (req, res) => {
-  const { _id } = req.params;
-  const { name, description, price, restaurantID, category, imageUrl } = req.body;
+  const id = req.params.id;
+  const { _id, name, description, price, restaurantID, category, imageUrl } = req.body;
   try {
-    const updatedItem = await MenuItem.findByIdAndUpdate(_id, {
+    const updatedItem = await MenuItem.findByIdAndUpdate(id, {
       _id,
       name,
       description,

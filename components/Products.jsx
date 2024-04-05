@@ -167,19 +167,19 @@ class Products extends React.Component {
         <main className='container'>
           <div className="tab-container">
             <button
-              className={`tab-button ms-2 mb-2 ${activeTab === '' ? 'active' : ''}`}
+              className={`btn-group tab-button ms-2 mb-2 ${activeTab === '' ? 'active' : ''}`}
               onClick={() => this.handleTabChange('')}
             >
               All
             </button>
             <button
-              className={`tab-button ms-2 mb-2 ${activeTab === 'veg' ? 'active' : ''}`}
+              className={`btn-group tab-button ms-2 mb-2 ${activeTab === 'veg' ? 'active' : ''}`}
               onClick={() => this.handleTabChange('veg')}
             >
               Vegetarian
             </button>
             <button
-              className={`tab-button ms-2 mb-2 ${activeTab === 'nonVeg' ? 'active' : ''}`}
+              className={`btn-group tab-button ms-2 mb-2 ${activeTab === 'nonVeg' ? 'active' : ''}`}
               onClick={() => this.handleTabChange('nonVeg')}
             >
               Non-vegetarian
