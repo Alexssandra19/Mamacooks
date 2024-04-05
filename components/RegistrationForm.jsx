@@ -61,7 +61,7 @@ class RegistrationForm extends React.Component {
       <div>
         <Page />
       <div>
-        <h2>Registration</h2>
+        <h2 className='mt-3'>Registration</h2>
         <form onSubmit={this.handleSubmit} name="registrationForm" className="form-box" method="POST" action="/register">
           <div className="form-group">
             <label htmlFor="fname">First name</label>

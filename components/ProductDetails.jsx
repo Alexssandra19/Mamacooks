@@ -145,7 +145,7 @@ class ProductDetails extends Component {
         <div>
           {this.state.login && <Navigate to="/login" replace="true"/>}
           <Page />
-          <h2>Product Details</h2>
+          <h2 className='mt-3'>Product Details</h2>
           <div className='container'>
             <div className="product-details-container">
               <div className="product-image-container">

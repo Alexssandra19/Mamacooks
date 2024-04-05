@@ -163,7 +163,7 @@ class Products extends React.Component {
         {this.state.productId && <Navigate to="/product-details" replace="true"/>}
         {this.state.login && <Navigate to="/login" replace="true"/>}
           <Page />
-          <h2>Products</h2>
+          <h2 className='mt-3'>Products</h2>
         <main className='container'>
           <div className="tab-container">
             <button

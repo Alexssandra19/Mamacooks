@@ -91,7 +91,7 @@ class Checkout extends Component {
       <div>
         {this.state.isPlaced && <Navigate to="/checkout-success" replace="true"/>}
         <Page />
-        <h2>Checkout</h2>
+        <h2 className='mt-3'>Checkout</h2>
         <div className="form-box">
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="name">Name:</label>

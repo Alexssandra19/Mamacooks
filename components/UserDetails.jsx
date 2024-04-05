@@ -102,6 +102,7 @@ class UserDetails extends Component {
         return (
           <div>
             <Page />
+            <h2 className='mt-3'>User Details</h2>
             <form name="userForm" className="form-box" method="POST" action="/user/edit">
             <div className="form-group">
               <label htmlFor="fname">First Name: </label>
