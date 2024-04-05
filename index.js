@@ -51,6 +51,23 @@ app.get('/api/user/:id', async (req, res) => {
   }
 });
 
+app.put('/api/user/:id', async (req, res) => {
+  const user = new User(req.body);
+  try {
+    const updatedDetails = await User.findByIdAndUpdate(user._id, req.body, { new: true });
+    if (!updatedDetails) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'User data updated successfully', data: updatedDetails });
+
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 app.get('/api/menuItems', async (req, res) => {
   try {
     const menuItems = await MenuItem.find(); 

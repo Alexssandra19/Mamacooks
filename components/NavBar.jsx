@@ -2,6 +2,7 @@ import React from "react";
 
 const Navbar = () => {
   const dataFromSession = sessionStorage.getItem('Name');
+  const userId = sessionStorage.getItem('UserId');
   const isLoggedIn = dataFromSession ? true : false;
   const isAdmin = dataFromSession && dataFromSession.toUpperCase() == 'ADMIN ADMIN' ? true : false;
   const handleClick =  () => {
@@ -18,7 +19,8 @@ const Navbar = () => {
     <nav>
       <ul>
         <li>
-             {dataFromSession ? dataFromSession.toUpperCase() : ''}
+             {/* <a href={`/user-details/${userId}`}>{dataFromSession ? dataFromSession.toUpperCase() : ''}</a> */}
+             <a href={`/user-details`}>{dataFromSession ? dataFromSession.toUpperCase() : ''}</a>
         </li>
         <li>
           <a href="/home">HOME</a>
