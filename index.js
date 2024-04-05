@@ -8,6 +8,7 @@ const MenuItem = require('./models/product');
 const Feedback = require('./models/feedback');
 const Cart = require("./models/cart");
 const { ObjectId } = require('mongodb');
+const Order = require("./models/order");
 
 app.use(express.static("public"));
 
@@ -164,6 +165,37 @@ app.put('/api/checkout/:id', async (req, res) => {
   }
 });
 
+// Route to delete user data by ID
+app.delete('/api/checkout/:id', async (req, res) => {
+  const { id } = req.params; // Extract the user ID from the request parameters
+  try {
+    // Attempt to find the user by ID and delete it
+    const deletedUserCart = await Cart.findOneAndDelete({userId:id});
+    if (deletedUserCart) {
+      res.json({ success: true, message: 'Cart deleted successfully' });
+    } else {
+      res.status(404).json({ success: false, message: 'Cart not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Route to place order
+app.post('/api/order', async (req, res) => {
+  try {
+    const orderData = new Order(req.body);
+    await orderData.save();
+    
+    res.status(201).json({ message: 'Order placed successfully' });
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 // Route to handle registration
 app.post('/api/add/feedback', async (req, res) => {
   try {
@@ -214,7 +246,7 @@ app.delete('/api/products/:id', async (req, res) => {
 app.get('/api/product/:id', async (req, res) => {
   try {
     const productId = req.params.id;
-    const product = await MenuItem.findOne(productId);
+    const product = await MenuItem.findById(productId);
     if (product) {
       res.json({ success: true, data: product });
     } else {
@@ -227,10 +259,10 @@ app.get('/api/product/:id', async (req, res) => {
 });
 
 app.put('/api/products/:id', async (req, res) => {
-  const { _id } = req.params;
-  const { name, description, price, restaurantID, category, imageUrl } = req.body;
+  const id = req.params.id;
+  const { _id, name, description, price, restaurantID, category, imageUrl } = req.body;
   try {
-    const updatedItem = await MenuItem.findByIdAndUpdate(_id, {
+    const updatedItem = await MenuItem.findByIdAndUpdate(id, {
       _id,
       name,
       description,

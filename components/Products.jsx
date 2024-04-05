@@ -2,7 +2,6 @@ import React , { useEffect, useState } from 'react';
 import Page from "./NavBar.jsx";
 import MenuItem from '../models/product.js';
 import Footer from './Footer.jsx';
-import {useNavigate} from 'react-router-dom';
 import Cart from '../models/cart.js';
 import { Navigate } from 'react-router-dom';
 
@@ -86,6 +85,9 @@ class Products extends React.Component {
     if (userId) {
       const userCheckout = await this.getUserCheckout(userId);
       if (userCheckout) {
+        const curProduct = userCheckout.items.find(x => x.productId == item._id);
+        quantity = curProduct ? curProduct.quantity + quantity : quantity;
+        userCheckout.items = userCheckout.items.filter(x => x.productId != item._id);
         let checkoutData = new Cart({
           userId: userId,
           items: [...userCheckout.items, {
@@ -147,31 +149,37 @@ class Products extends React.Component {
       this.setState({login: true});
     }
   }
+
+  setProductId = async (productId) => {
+    this.setState({productId: productId});
+    sessionStorage.setItem('ProductId', productId);
+  }
   
   render() {
     const { apiData, activeTab, activeData } = this.state;
     return (
       <div>
-        {this.state.productId && <Navigate to="/product/${this.state.productId}" replace="true"/>}
+        {/* {this.state.productId && <Navigate to="/product/${this.state.productId}" replace="true"/>} */}
+        {this.state.productId && <Navigate to="/product-details" replace="true"/>}
         {this.state.login && <Navigate to="/login" replace="true"/>}
           <Page />
-          <h2>Products</h2>
+          <h2 className='mt-3'>Products</h2>
         <main className='container'>
           <div className="tab-container">
             <button
-              className={`tab-button ms-2 mb-2 ${activeTab === '' ? 'active' : ''}`}
+              className={`btn-group tab-button ms-2 mb-2 ${activeTab === '' ? 'active' : ''}`}
               onClick={() => this.handleTabChange('')}
             >
               All
             </button>
             <button
-              className={`tab-button ms-2 mb-2 ${activeTab === 'veg' ? 'active' : ''}`}
+              className={`btn-group tab-button ms-2 mb-2 ${activeTab === 'veg' ? 'active' : ''}`}
               onClick={() => this.handleTabChange('veg')}
             >
               Vegetarian
             </button>
             <button
-              className={`tab-button ms-2 mb-2 ${activeTab === 'nonVeg' ? 'active' : ''}`}
+              className={`btn-group tab-button ms-2 mb-2 ${activeTab === 'nonVeg' ? 'active' : ''}`}
               onClick={() => this.handleTabChange('nonVeg')}
             >
               Non-vegetarian
@@ -182,9 +190,9 @@ class Products extends React.Component {
               <div className="row m-0">
               {activeData ? activeData.map(item => (
                 <div className="card bg-light m-2 p-3"  style={{ width: '19rem'}}>
-                  <a href={`/product/${item._id}`}>
-                  <img src={'./images' + item.imageUrl} alt={item.name} className="card-img-top" style={{ height: '200px'}} />
-                  </a>
+                  {/* <a href={`/product-details`}> */}
+                  <img onClick={() => this.setProductId(item._id)} src={'./images' + item.imageUrl} alt={item.name} className="card-img-top" style={{ height: '200px'}} />
+                  {/* </a> */}
                   <div class="card-body">
                     <h5 class="card-title">{item.name}</h5>
                     <p class="card-text h-25">{item.description}</p>

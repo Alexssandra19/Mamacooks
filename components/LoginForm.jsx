@@ -78,7 +78,7 @@ class LoginForm extends Component {
         {this.state.isPlaced && <Navigate to="/" replace="true"/>}
         <Page />
       <div className="container">
-        <h2>Login</h2>
+      <h2 className='mt-3'>Login</h2>
         <form onSubmit={this.handleSubmit} className='form-box' name="loginForm">
           <div className="form-group">
             <label htmlFor="email">Email:</label>

@@ -16,7 +16,9 @@ class AddMenuItem extends React.Component {
             products: [],
             activeTab: 'add',
             editMode: false,
-            editedProduct: null
+            editedProduct: null,
+            sortedBy: null,
+            sortOrder: 'asc',
         };
     }
 
@@ -56,7 +58,8 @@ class AddMenuItem extends React.Component {
         });
     };
 
-    handleChange = (e, fieldName) => {
+    handleEditChange = (e, fieldName) => {
+        console.log(e.target.value);
         const { editedProduct } = this.state;
         const updatedProduct = { ...editedProduct, [fieldName]: e.target.value };
         this.setState({
@@ -70,12 +73,22 @@ class AddMenuItem extends React.Component {
     };
 
     handleUpdate = async (productId) => {
+        // Prepare form data
+        const formData = {
+            _id: this.state.editedProduct._id,
+            name: this.state.editedProduct.name,
+            description: this.state.editedProduct.description,
+            price: this.state.editedProduct.price,
+            restaurantID: this.state.editedProduct.restaurantID,
+            category: this.state.editedProduct.category,
+            imageUrl: this.state.editedProduct.imageUrl,
+        };
         fetch(`/api/products/${productId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.state.editedProduct)
+            body: JSON.stringify(formData)
         })
             .then(response => {
                 if (response.ok) {
@@ -158,197 +171,245 @@ class AddMenuItem extends React.Component {
             imageUrl: '',
         });
     };
+
+    // Function to handle sorting
+    handleSort = (cri) => {
+        if(!this.state.editMode) {
+            const { products, sortedBy, sortOrder } = this.state;
+        let newOrder = 'asc';
+
+        // If already sorted by the same criteria, toggle the sort order
+        if (cri === sortedBy) {
+            newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        }
+
+        // Perform sorting based on the selected criteria and order
+        const sortedProducts = products.slice().sort((a, b) => {
+            let comparison = 0;
+            if (a[cri] > b[cri]) {
+                comparison = 1;
+            } else if (a[cri] < b[cri]) {
+                comparison = -1;
+            }
+            return newOrder === 'desc' ? comparison * -1 : comparison;
+        });
+
+        // Update state with sorted products and sort criteria/order
+        this.setState({
+            products: sortedProducts,
+            sortedBy: cri,
+            sortOrder: newOrder,
+        });
+        }
+    };
+
     render() {
         const { activeTab, editMode, editedProduct } = this.state;
         return (
             <div>
                 <Page />
-                <div className="tab-container">
-                    <button
-                        className={`tab-button ms-2 mb-2 ${activeTab === 'add' ? 'active' : ''}`}
-                        onClick={() => this.handleTabChange('add')}
-                    >
-                        Add New Item
-                    </button>
-                    <button
-                        className={`tab-button ms-2 mb-2 ${activeTab === 'edit' ? 'active' : ''}`}
-                        onClick={() => this.handleTabChange('edit')}
-                    >
-                        Edit Item
-                    </button>
-                </div>
-                <div>
-                    {activeTab && activeTab === 'add' ? (
-                        <div>
-                            <h2>Add Menu Item</h2>
-                            <form onSubmit={this.handleSubmit} className='form-box'>
-                                <div className="mb-3">
-                                    <label htmlFor="name" className="form-label">Name:</label>
-                                    <input className="form-control" type="text"
-                                        name="name"
-                                        id="name"
-                                        value={this.state.name}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="description" className="form-label">Description:</label>
-                                    <textarea className="form-control"
-                                        id="description"
-                                        rows="3"
-                                        name="description"
-                                        value={this.state.description}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="price" className="form-label">Price:</label>
-                                    <input className="form-control" type="number"
-                                        name="price"
-                                        id="price"
-                                        value={this.state.price}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="restaurantID" className="form-label">Restaurant ID:</label>
-                                    <input className="form-control" type="text"
-                                        name="restaurantID"
-                                        id="restaurantID"
-                                        value={this.state.restaurantID}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="category" className="form-label">Category:</label>
-                                    <input className="form-control" type="text"
-                                        name="category"
-                                        id="category"
-                                        value={this.state.category}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="imageUrl" className="form-label">Image Url:</label>
-                                    <input className="form-control" type="text"
-                                        name="imageUrl"
-                                        id="imageUrl"
-                                        value={this.state.imageUrl}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
-                                <button className='btn btn-success' type="submit">Add Menu Item</button>
-                            </form>
-                        </div>
-                    ) : <div></div>}
-                    {activeTab && activeTab === 'edit' ? (
-                        <div className='container'>
-                            <h2>Existing Products</h2>
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col"></th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Restaurant ID</th>
-                                        <th scope="col">Category</th>
-                                        <th scope="col">Image Url</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.products.map(product =>
-                                    (
-                                        <tr key={product._id}>
-                                            <td>{product.id}</td>
-                                            <td>
-                                                {editMode && editedProduct._id === product._id ? (
-                                                    <input
-                                                        type="text"
-                                                        value={editedProduct.name}
-                                                        onChange={(e) => this.handleChange(e, 'name')}
-                                                    />
-                                                ) : (
-                                                    product.name
-                                                )}
-                                            </td>
-                                            <td>
-                                                {editMode && editedProduct._id === product._id ? (
-                                                    <input
-                                                        type="text"
-                                                        value={editedProduct.description}
-                                                        onChange={(e) => this.handleChange(e, 'description')}
-                                                    />
-                                                ) : (
-                                                    product.description
-                                                )}
-                                            </td>
-                                            <td>
-                                                {editMode && editedProduct._id === product._id ? (
-                                                    <input
-                                                        type="number"
-                                                        value={editedProduct.price}
-                                                        onChange={(e) => this.handleChange(e, 'price')}
-                                                    />
-                                                ) : (
-                                                    product.price
-                                                )}
-                                            </td>
-                                            <td>
-                                                {editMode && editedProduct._id === product._id ? (
-                                                    <input
-                                                        type="text"
-                                                        value={product.restaurantID}
-                                                        onChange={(e) => this.handleChange(e, 'restaurantID')}
-                                                    />
-                                                ) : (
-                                                    product.restaurantID
-                                                )}
-                                            </td>
-                                            <td>
-                                                {editMode && editedProduct._id === product._id ? (
-                                                    <input
-                                                        type="text"
-                                                        value={product.category}
-                                                        onChange={(e) => this.handleChange(e, 'category')}
-                                                    />
-                                                ) : (
-                                                    product.category
-                                                )}
-                                            </td>
-                                            <td>
-                                                {editMode && editedProduct._id === product._id ? (
-                                                    <input
-                                                        type="text"
-                                                        value={product.imageUrl}
-                                                        onChange={(e) => this.handleChange(e, 'imageUrl')}
-                                                    />
-                                                ) : (
-                                                    product.imageUrl
-                                                )}
-                                            </td>
-                                            <td>
-                                                {editMode && editedProduct._id === product._id ? (
-                                                    <button className='btn btn-success' onClick={() => this.handleUpdate(product._id)}>Save</button>
-                                                ) : (
-                                                    <button className='btn btn-primary' onClick={() => this.handleEdit(product)}>Edit</button>
-                                                )}
-                                                <button className='btn btn-danger ms-2' onClick={() => this.handleDelete(product._id)}>Delete</button>
-                                            </td>
+                <main className='container'>
+                    <div className="tab-container">
+                        <button
+                            className={`btn-group tab-button ms-2 mb-2 ${activeTab === 'add' ? 'active' : ''}`}
+                            onClick={() => this.handleTabChange('add')}
+                        >
+                            Add New Item
+                        </button>
+                        <button
+                            className={`btn-group tab-button ms-2 mb-2 ${activeTab === 'edit' ? 'active' : ''}`}
+                            onClick={() => this.handleTabChange('edit')}
+                        >
+                            Edit Item
+                        </button>
+                    </div>
+                    <div>
+                        {activeTab && activeTab === 'add' ? (
+                            <div>
+                                <h2>Add Menu Item</h2>
+                                <form onSubmit={this.handleSubmit} className='form-box'>
+                                    <div className="mb-3">
+                                        <label htmlFor="name" className="form-label">Name:</label>
+                                        <input className="form-control" type="text"
+                                            name="name"
+                                            id="name"
+                                            value={this.state.name}
+                                            onChange={this.handleChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="description" className="form-label">Description:</label>
+                                        <textarea className="form-control"
+                                            id="description"
+                                            rows="3"
+                                            name="description"
+                                            value={this.state.description}
+                                            onChange={this.handleChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="price" className="form-label">Price:</label>
+                                        <input className="form-control" type="number"
+                                            name="price"
+                                            id="price"
+                                            min="0"
+                                            value={this.state.price}
+                                            onChange={this.handleChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="restaurantID" className="form-label">Restaurant ID:</label>
+                                        <input className="form-control" type="text"
+                                            name="restaurantID"
+                                            id="restaurantID"
+                                            value={this.state.restaurantID}
+                                            onChange={this.handleChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="category" className="form-label">Category:</label>
+                                        <select
+                                            className="form-select"
+                                            name="category"
+                                            id="category"
+                                            value={this.state.category}
+                                            onChange={this.handleChange}
+                                            required
+                                        >
+                                            <option value="">Select Category</option>
+                                            <option value="veg">Vegeterian</option>
+                                            <option value="nonVeg">Non-Veg</option>
+                                        </select>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="imageUrl" className="form-label">Image Url:</label>
+                                        <input className="form-control" type="text"
+                                            name="imageUrl"
+                                            id="imageUrl"
+                                            value={this.state.imageUrl}
+                                            onChange={this.handleChange}
+                                            required
+                                        />
+                                    </div>
+                                    <button className='btn btn-success' type="submit">Add Menu Item</button>
+                                </form>
+                            </div>
+                        ) : <div></div>}
+                        {activeTab && activeTab === 'edit' ? (
+                            <div className='container'>
+                                <h2>Existing Products</h2>
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col" onClick={() => this.handleSort('name')}>Name {this.state.sortedBy === 'name' && <span>{this.state.sortOrder === 'asc' ? '▲' : '▼'}</span>}</th>
+                                            <th scope="col" onClick={() => this.handleSort('description')}>Description {this.state.sortedBy === 'description' && <span>{this.state.sortOrder === 'asc' ? '▲' : '▼'}</span>}</th>
+                                            <th scope="col" onClick={() => this.handleSort('price')}>Price {this.state.sortedBy === 'price' && <span>{this.state.sortOrder === 'asc' ? '▲' : '▼'}</span>}</th>
+                                            <th scope="col" onClick={() => this.handleSort('restaurantID')}>Restaurant ID {this.state.sortedBy === 'restaurantID' && <span>{this.state.sortOrder === 'asc' ? '▲' : '▼'}</span>}</th>
+                                            <th scope="col" onClick={() => this.handleSort('category')}>Category {this.state.sortedBy === 'category' && <span>{this.state.sortOrder === 'asc' ? '▲' : '▼'}</span>}</th>
+                                            <th scope="col" onClick={() => this.handleSort('imageUrl')}>Image Url {this.state.sortedBy === 'imageUrl' && <span>{this.state.sortOrder === 'asc' ? '▲' : '▼'}</span>}</th>
+                                            <th scope="col">Actions</th>
+                                            <th scope="col"></th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : <div></div>}
-                </div>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.products.map(product =>
+                                        (
+                                            <tr key={product._id}>
+                                                <td>{product.id}</td>
+                                                <td>
+                                                    {editMode && editedProduct._id === product._id ? (
+                                                        <input
+                                                            type="text"
+                                                            value={editedProduct.name}
+                                                            onChange={(e) => this.handleEditChange(e, 'name')}
+                                                        />
+                                                    ) : (
+                                                        product.name
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {editMode && editedProduct._id === product._id ? (
+                                                        <input
+                                                            type="text"
+                                                            value={editedProduct.description}
+                                                            onChange={(e) => this.handleEditChange(e, 'description')}
+                                                        />
+                                                    ) : (
+                                                        product.description
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {editMode && editedProduct._id === product._id ? (
+                                                        <input
+                                                            type="number"
+                                                            min="0"
+                                                            value={editedProduct.price}
+                                                            onChange={(e) => this.handleEditChange(e, 'price')}
+                                                        />
+                                                    ) : (
+                                                        product.price
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {editMode && editedProduct._id === product._id ? (
+                                                        <input
+                                                            type="text"
+                                                            value={editedProduct.restaurantID}
+                                                            onChange={(e) => this.handleEditChange(e, 'restaurantID')}
+                                                        />
+                                                    ) : (
+                                                        product.restaurantID
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {editMode && editedProduct._id === product._id ? (
+                                                        <select
+                                                            value={editedProduct.category}
+                                                            onChange={(e) => this.handleEditChange(e, 'category')}
+                                                            className="form-select"
+                                                        >
+                                                            <option value="">Select Category</option>
+                                                            <option value="veg">Vegeterian</option>
+                                                            <option value="nonVeg">Non-Veg</option>
+                                                        </select>
+                                                    ) : (
+                                                        product.category
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {editMode && editedProduct._id === product._id ? (
+                                                        <input
+                                                            type="text"
+                                                            value={editedProduct.imageUrl}
+                                                            onChange={(e) => this.handleEditChange(e, 'imageUrl')}
+                                                        />
+                                                    ) : (
+                                                        product.imageUrl
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    {editMode && editedProduct._id === product._id ? (
+                                                        <button className='btn btn-success' onClick={() => this.handleUpdate(product._id)}>Save</button>
+                                                    ) : (
+                                                        <button className='btn btn-primary' onClick={() => this.handleEdit(product)}>Edit</button>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <button className='btn btn-danger ms-2' onClick={() => this.handleDelete(product._id)}>Delete</button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : <div></div>}
+                    </div>
+                </main>
                 <footer>
                     <Footer />
                 </footer>

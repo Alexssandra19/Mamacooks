@@ -12,11 +12,15 @@ class UserDetails extends Component {
           phoneNumber: '',
           email: '',
           isEditMode: false,
-          userId: '65cff7edc8629ae342cf24d2'
+          userId: ''
         };
       }
       
       componentDidMount() {
+        const userId = sessionStorage.getItem('UserId');
+        this.setState({
+          userId: userId
+        });
         this.fetchUserData();
       }
 
@@ -70,8 +74,10 @@ class UserDetails extends Component {
     };
 
       fetchUserData = async () => {
+        
+        const userId = sessionStorage.getItem('UserId');
         try {
-          const response = await fetch(`/api/user/${this.state.userId}`, {
+          const response = await fetch(`/api/user/${userId}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
@@ -83,10 +89,8 @@ class UserDetails extends Component {
           }
     
           const userDetails = await response.json();
-          console.log(userDetails);
           const userInfo = new User(userDetails.data);
           this.setState({firstName: userInfo.firstName, lastName: userInfo.lastName, phoneNumber: userInfo.phoneNumber, email: userInfo.email})
-          console.log(userInfo);
         } catch (error) {
           alert('Failed to get User data');
           console.error('Failed to get User data:', error);
@@ -98,6 +102,7 @@ class UserDetails extends Component {
         return (
           <div>
             <Page />
+            <h2 className='mt-3'>User Details</h2>
             <form name="userForm" className="form-box" method="POST" action="/user/edit">
             <div className="form-group">
               <label htmlFor="fname">First Name: </label>
@@ -135,7 +140,7 @@ class UserDetails extends Component {
               )}
             </div>
     
-            <button onClick={this.toggleEditMode}>{isEditMode ? 'Save' : 'Edit'}</button>
+            <button className='btn btn-lg btn-success w-100' onClick={this.toggleEditMode}>{isEditMode ? 'Save' : 'Edit'}</button>
             </form>
             <footer>
           <Footer />
