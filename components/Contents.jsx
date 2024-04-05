@@ -25,7 +25,8 @@ class Contents extends React.Component {
         <Route path="/products" element={<Products />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/admin" element={<AddMenuItem />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
+        {/* <Route path="/product/:id" element={<ProductDetails />} /> */}
+        <Route path="/product-details" element={<ProductDetails />} />
         <Route path="/checkout-success" element={<CheckoutSuccess />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/cart" element={<CartPage />} />

@@ -214,7 +214,7 @@ app.delete('/api/products/:id', async (req, res) => {
 app.get('/api/product/:id', async (req, res) => {
   try {
     const productId = req.params.id;
-    const product = await MenuItem.findOne(productId);
+    const product = await MenuItem.findById(productId);
     if (product) {
       res.json({ success: true, data: product });
     } else {

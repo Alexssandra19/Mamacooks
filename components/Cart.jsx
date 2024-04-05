@@ -59,7 +59,7 @@ class CartPage extends Component {
                 this.setState({ products: mappedMenuItems });
                 if (mappedMenuItems && userCheckout.data?.items?.length > 0) {
                     let cartItems = [];
-                    this.setState({checkout: userCheckout.data})
+                    this.setState({checkout: userCheckout.data});
                     userCheckout.data?.items?.forEach(item => {
                         const product = mappedMenuItems.find(product => product._id == item.productId);
                         if (product) {
@@ -83,7 +83,6 @@ class CartPage extends Component {
   handleDeleteItem = (id) => {
     const items = this.state.checkout.items.filter(item => item.productId != id);
     const userId = this.state.checkout.userId;
-    console.log(items);
     let checkoutData = new Cart({
         userId,
         items
