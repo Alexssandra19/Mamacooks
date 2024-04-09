@@ -5,6 +5,7 @@ import CartItem from '../models/cartItem.js';
 import MenuItem from '../models/product.js';
 import Cart from '../models/cart.js';
 import { Navigate } from 'react-router-dom';
+import Order from '../models/order.js';
 
 class CartPage extends Component {
   constructor(props) {
@@ -13,11 +14,13 @@ class CartPage extends Component {
       cartItems: [],
       products: [],
       checkout: null,
-      isPlaced: false
+      isPlaced: false,
+      discount: 0
     };
   }
 
   componentDidMount() {
+    this.fetchOrderData();
     this.getUserCheckout();
   }
 
@@ -39,6 +42,38 @@ class CartPage extends Component {
       })
       .catch(error => console.error('Failed to update product:', error));
   }
+
+  fetchOrderData = async () => {
+    const userId = sessionStorage.getItem('UserId');
+    try {
+      const response = await fetch(`/api/order/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const orderData = await response.json();
+      const orderedData = orderData.data.map((order) => {
+        return new Order(order);
+      });
+      if(orderedData) {
+        const activeOrderData = orderedData.filter(x => {
+          return x.status === 'pending' || x.status === 'processing' || x.status === 'shipped' || x.status === 'delivered';
+        });
+        let discount = activeOrderData.length == 0 ? 0.5 :
+                       activeOrderData.length > 0 && activeOrderData.length < 3 ? 0.25 :
+                       activeOrderData.length % 5 == 0 ? 0.1 : 0;
+        this.setState({ discount: discount });               
+      }
+      
+    } catch (error) {
+      console.error('Failed to get Data:', error);
+    }
+  };
 
   getUserCheckout = async () => {
     const userId = sessionStorage.getItem('UserId');
@@ -153,9 +188,11 @@ class CartPage extends Component {
   render() {
     const { cartItems } = this.state;
     const subtotal = cartItems?.length > 0 ? cartItems.reduce((acc, item) => acc + item.price * item.quantity * 1.00, 0) : 0;
-    const tax = subtotal * 0.13;
-    const delivery = subtotal > 30.00 ? 0.00 : subtotal > 20.00 && subtotal < 30.00 ? 2.99 : 4.99;
-    const total = subtotal + tax + 5.00 + delivery;
+    const discount = this.state.discount * subtotal;
+    const subTotalAfterDisc = subtotal - discount;
+    const tax = subTotalAfterDisc * 0.13;
+    const delivery = subTotalAfterDisc > 30.00 ? 0.00 : subTotalAfterDisc > 20.00 && subTotalAfterDisc < 30.00 ? 2.99 : 4.99;
+    const total = subTotalAfterDisc + tax + 5.00 + delivery;
     return (
       <div>
         <Page />
@@ -202,6 +239,10 @@ class CartPage extends Component {
                     <div className="d-flex justify-content-between align-items-center w-100">
                       <h5 className="me-5 mt-2">Subtotal:</h5>
                       <span>${subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className="d-flex justify-content-between align-items-center w-100">
+                      <h5 className="me-5 mt-2">Discount:</h5>
+                      <span>{(this.state.discount * 100).toFixed(0)}%</span>
                     </div>
                     <div className="d-flex justify-content-between align-items-center w-100">
                       <h5 className="me-5 mt-2">Delivery Charge:</h5>

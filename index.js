@@ -196,6 +196,22 @@ app.post('/api/order', async (req, res) => {
   }
 });
 
+// Route to get order details
+app.get('/api/order/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const order = await Order.find({userId: new ObjectId(id)}); 
+    if (order) {
+      res.json({ success: true, data: order });
+    } else {
+      res.json({ success: false, message: 'No data Found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 // Route to handle registration
 app.post('/api/add/feedback', async (req, res) => {
   try {
