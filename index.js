@@ -196,6 +196,22 @@ app.post('/api/order', async (req, res) => {
   }
 });
 
+// Route to get order details
+app.get('/api/order/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const order = await Order.find({userId: new ObjectId(id)}); 
+    if (order) {
+      res.json({ success: true, data: order });
+    } else {
+      res.json({ success: false, message: 'No data Found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 // Route to handle registration
 app.post('/api/add/feedback', async (req, res) => {
   try {
@@ -205,6 +221,31 @@ app.post('/api/add/feedback', async (req, res) => {
     await feedback.save();
     
     res.status(201).json({ message: 'Feedback added successfully' });
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.put('/api/update/feedback/:id', async (req, res) => {
+  const id = req.params.id;
+  const { _id, firstName, lastName, rating, comment, reply} = req.body;
+  try {
+    const addedFeedaback = await Feedback.findByIdAndUpdate(id, {
+      _id,
+      firstName,
+      lastName,
+      rating,
+      comment,
+      reply
+    }, { new: true });
+    if (!addedFeedaback) {
+      return res.status(404).json({ message: 'Feedback reply failed.' });
+    }
+
+    res.status(200).json({ message: 'Feedback reply added.', data: addedFeedaback });
+
   } catch (error) {
    
     console.error(error);

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Feedback from './Feedback.jsx';
 import BlogPage from './BlogPage.jsx';
+import AppChatbot from './AppChatbot.jsx';
 
 class Home extends Component {
+
   render() {
     const dataFromSession = sessionStorage.getItem('Name');
     const isLoggedIn = dataFromSession ? true : false;
@@ -17,6 +19,7 @@ class Home extends Component {
             <button id="header-button"><a href="/products">ORDER NOW</a></button>
           </div>
         </header>
+        <AppChatbot />
         {  isLoggedIn ?
         <section id="content" className="content">
           <div id="blog-section" className="blog-section">

@@ -79,8 +79,8 @@ class BlogPage extends Component {
         return (
           <div className="blog-page">
             <div className="blog-posts">
-                <BlogPost post={currentPost} />
-                <BlogPost post={secondPost} />
+                { currentPost ? <BlogPost post={currentPost} /> : <></> }
+                { secondPost ? <BlogPost post={secondPost} /> : <></> }
             </div>
           </div>
         );
@@ -88,9 +88,9 @@ class BlogPage extends Component {
         return (
           <div className="blog-page">
             <div className="blog-posts">
-                <BlogPost post={currentPost} />
-                <BlogPost post={secondPost} />
-                <BlogPost post={thirdPost} />
+                { currentPost ? <BlogPost post={currentPost} /> : <></> }
+                { secondPost ? <BlogPost post={secondPost} /> : <></> }
+                { thirdPost ? <BlogPost post={thirdPost} /> : <></> }
             </div>
           </div>
         );
