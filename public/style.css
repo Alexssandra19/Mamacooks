@@ -397,3 +397,39 @@ h1 {
   font-weight: bold;
   color: #333;
 }
+
+.chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 350px;
+  max-height: 520px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+
+.chatbot-container.closed {
+  height: 40px;
+  width: 50px;
+}
+
+.toggle-chatbot-btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 8px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-top: 1px solid #ccc;
+  cursor: pointer;
+  outline: none;
+}
+
+.toggle-chatbot-btn:hover {
+  background-color: #0056b3;
+}
