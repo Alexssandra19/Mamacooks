@@ -228,6 +228,31 @@ app.post('/api/add/feedback', async (req, res) => {
   }
 });
 
+app.put('/api/update/feedback/:id', async (req, res) => {
+  const id = req.params.id;
+  const { _id, firstName, lastName, rating, comment, reply} = req.body;
+  try {
+    const addedFeedaback = await Feedback.findByIdAndUpdate(id, {
+      _id,
+      firstName,
+      lastName,
+      rating,
+      comment,
+      reply
+    }, { new: true });
+    if (!addedFeedaback) {
+      return res.status(404).json({ message: 'Feedback reply failed.' });
+    }
+
+    res.status(200).json({ message: 'Feedback reply added.', data: addedFeedaback });
+
+  } catch (error) {
+   
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 // Route to handle registration
 app.post('/api/register/menuItem', async (req, res) => {
   try {

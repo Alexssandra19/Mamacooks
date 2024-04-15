@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Page from '../NavBar.jsx';
 import Footer from '../Footer.jsx';
 import MenuItem from '../../models/product.js';
+import Feedback from '../../models/feedback.js';
+import AllFeedback from './AllFeedback.jsx';
 
 class AddMenuItem extends React.Component {
     constructor() {
@@ -49,7 +51,6 @@ class AddMenuItem extends React.Component {
             console.error('Failed to get Menu Items:', error);
         }
     };
-
 
     handleEdit = (product) => {
         this.setState({
@@ -221,6 +222,12 @@ class AddMenuItem extends React.Component {
                             onClick={() => this.handleTabChange('edit')}
                         >
                             Edit Item
+                        </button>
+                        <button
+                            className={`btn-group tab-button ms-2 mb-2 ${activeTab === 'feedback' ? 'active' : ''}`}
+                            onClick={() => this.handleTabChange('feedback')}
+                        >
+                            Feedback
                         </button>
                     </div>
                     <div>
@@ -407,6 +414,9 @@ class AddMenuItem extends React.Component {
                                     </tbody>
                                 </table>
                             </div>
+                        ) : <div></div>}
+                        {activeTab && activeTab === 'feedback' ? (
+                            <AllFeedback></AllFeedback>
                         ) : <div></div>}
                     </div>
                 </main>

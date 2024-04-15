@@ -15,15 +15,21 @@ class BlogPost extends Component {
   render() {
     const { post } = this.props;
     return (
-        <div className="feedback-card">
-            <div className="feedback-content">
-                <p className="feedback-text">{post.comment}</p>
-                <div className="feedback-rating">
-                    {this.renderStars(post.rating)}
-                    <span className="rating">{post.rating}/5</span>
-                </div>
+      <div className="feedback-card">
+        <div className="feedback-content">
+          <p className="feedback-text">{post.comment}</p>
+          <div className="feedback-rating">
+            {this.renderStars(post.rating)}
+            <span className="rating">{post.rating}/5</span>
+          </div>
+          <span className="person-name">-{post.firstName} {post.lastName}</span>
+          {post.reply && (
+            <div className="reply-field">
+              <strong>Reply:</strong> {post.reply}
             </div>
+          )}
         </div>
+      </div>
     );
   }
 }
