@@ -98,9 +98,9 @@ h1 {
     text-shadow: 2px 5px #857c7c;
 }
 #head-title {
-    margin: 50px auto;
+    margin: -50px auto 50px auto;;
     width: 65%;
-    height: 15vh;
+    height: 10vh;
 }
 
 #header-button
@@ -110,6 +110,7 @@ h1 {
     color: #000;
     border-radius: 15px;
     padding: 15px 30px;
+    margin-top: 20px;
 }
 #header-button a
  {
