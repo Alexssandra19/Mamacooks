@@ -157,11 +157,9 @@ class Checkout extends Component {
             }
 
             const menuData = await response.json();
-            console.log(menuData.data);
             const mappedMenuItems = menuData.data.map((menu) => {
               return new MenuItem(menu);
             });
-            console.log(mappedMenuItems);
             this.setState({ products: mappedMenuItems });
             if (mappedMenuItems && userCheckout.data?.items?.length > 0) {
               let cartItems = [];
